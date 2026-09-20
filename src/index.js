@@ -72,6 +72,17 @@ export default {
     }
 
     if (!answers?.flap || !answers?.double) return Response.json({ error: "missing answer", raw: answers }, { status: 500 });
+    // 写进 Workers Logs（wrangler.toml 里 observability 已开），Logs 页可按字段筛选
+    console.log(
+      JSON.stringify({
+        ip: request.headers.get("cf-connecting-ip"),
+        country: request.cf?.country,
+        city: request.cf?.city,
+        flap: answers.flap.noul,
+        latency_ms: Date.now() - started,
+        backend,
+      }),
+    );
     return Response.json({
       flap: answers.flap.noul,
       double: answers.double.noul,

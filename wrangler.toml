@@ -7,3 +7,6 @@ directory = "public"
 
 [ai]
 binding = "AI"
+
+[observability]
+enabled = true
