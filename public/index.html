@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Flappy Jev</title>
+    <style>
+      body { margin: 0; font-family: system-ui, sans-serif; background: #1b1b1f; color: #eee; display: flex; justify-content: center; }
+      main { display: flex; gap: 24px; padding: 24px 16px; flex-wrap: wrap; align-items: flex-start; }
+      canvas { image-rendering: pixelated; border: 2px solid #333; touch-action: none; max-width: 100%; }
+      aside { width: 260px; }
+      h1 { font-size: 20px; margin: 0 0 12px; }
+      button { font-size: 16px; padding: 10px 16px; border: 0; border-radius: 6px; background: #4c6ef5; color: #fff; cursor: pointer; width: 100%; }
+      button:hover { background: #3b5bdb; }
+      dl { display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; margin: 16px 0; font-size: 14px; }
+      dt { color: #999; }
+      dd { margin: 0; font-variant-numeric: tabular-nums; }
+      .bar { height: 10px; background: #333; border-radius: 5px; overflow: hidden; }
+      .bar > div { height: 100%; width: 0; transition: width 80ms; }
+      p { font-size: 13px; color: #aaa; line-height: 1.5; }
+      #status { color: #ddd; margin-top: 8px; font-size: 14px; }
+      .option { display: block; margin-top: 8px; font-size: 14px; color: #ccc; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <canvas id="canvas" width="288" height="512"></canvas>
+      <aside>
+        <h1>Flappy Jev</h1>
+        <button id="toggle">Let Jev play</button>
+        <div id="status">Manual (Space or tap)</div>
+        <label class="option"><input type="checkbox" id="slow" checked /> Slow motion (0.5×) — each decision is one API round trip (~150 ms)</label>
+        <dl>
+          <dt>P(flap)</dt><dd><span id="prob">–</span><div class="bar"><div id="prob-bar"></div></div></dd>
+          <dt>Latency</dt><dd id="latency">–</dd>
+          <dt>Decisions</dt><dd id="decisions">0</dd>
+          <dt>Games</dt><dd id="games">0</dd>
+          <dt>Best score</dt><dd id="best">0</dd>
+        </dl>
+        <p>
+          The game keeps one request in flight: it posts the bird's position (projected by the last round-trip
+          latency) and the next gap to a Cloudflare Worker, which asks TypeSafe's Jev two yes/no questions:
+          flap now? and flap twice? Orange bar = flap, green = don't. No text is generated.
+        </p>
+      </aside>
+    </main>
+    <script src="game.js"></script>
+  </body>
+</html>
